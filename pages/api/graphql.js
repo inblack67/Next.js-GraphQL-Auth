@@ -9,6 +9,7 @@ connectDB();
 
 const apolloServer = new ApolloServer({
   schema,
+  context: ({ req, res }) => ({ req, res })
 })
 
 const handler = apolloServer.createHandler({
