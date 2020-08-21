@@ -2,6 +2,23 @@
 ### Do not make changes to this file directly
 
 
+type Mutation {
+  """Login"""
+  login(email: String, password: String): User!
+}
+
 type Query {
+  """Get Logged In User"""
+  getMe: User!
+
+  """GET All Users"""
+  users: [User!]!
+}
+
+type User {
+  _id: ID!
+  createdAt: String!
+  email: String!
   name: String!
+  password: String
 }

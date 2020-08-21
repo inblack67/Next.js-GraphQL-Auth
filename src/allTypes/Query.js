@@ -8,6 +8,18 @@ import ErrorResponse from '../../src/errorResponse'
 export const Query = queryType({
     definition(t) {
         t.typeName = 'Query'
+        t.field('getMe', {
+            type: User,
+            description: 'Get Logged In User',
+            resolve: async (parent, args, ctx) => {
+                const isAuthenticated = await isProtected(ctx);
+                if (!isAuthenticated) {
+                    throw new ErrorResponse('Not Auth!', 401);
+                }
+                return ctx.req.user;
+            }
+        });
+
         t.list.field('users', {
             type: User,
             description: 'GET All Users',

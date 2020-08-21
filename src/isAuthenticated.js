@@ -7,8 +7,6 @@ import asyncHandler from '../middlewares/asyncHandler';
 // protect routes
 export const isProtected = async ({ req, res }) => {
 
-    console.log(`isAuthenticated Ran`.yellow.bold);
-
     let token;
 
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -26,6 +24,7 @@ export const isProtected = async ({ req, res }) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
         req.user = await User.findById(decoded.id);
 
         return true;
