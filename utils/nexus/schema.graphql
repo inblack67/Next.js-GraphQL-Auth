@@ -3,5 +3,14 @@
 
 
 type Query {
+  """GET All Users"""
+  users: [User!]!
+}
+
+type User {
+  _id: ID!
+  createdAt: String!
+  email: String!
   name: String!
+  password: String
 }
