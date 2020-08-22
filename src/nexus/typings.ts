@@ -57,13 +57,15 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addStory: NexusGenRootTypes['Story']; // Story!
+    deleteStory: NexusGenRootTypes['Story'] | null; // Story
     login: NexusGenRootTypes['User']; // User!
     register: NexusGenRootTypes['User']; // User!
+    updateStory: NexusGenRootTypes['Story'] | null; // Story
   }
   Query: { // field return type
     getMe: NexusGenRootTypes['User']; // User!
     stories: NexusGenRootTypes['Story'][]; // [Story!]!
-    story: NexusGenRootTypes['Story']; // Story!
+    story: NexusGenRootTypes['Story'] | null; // Story
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
   Story: { // field return type
@@ -88,6 +90,9 @@ export interface NexusGenArgTypes {
       description?: string | null; // String
       title?: string | null; // String
     }
+    deleteStory: { // args
+      id?: string | null; // ID
+    }
     login: { // args
       email?: string | null; // String
       password?: string | null; // String
@@ -96,6 +101,11 @@ export interface NexusGenArgTypes {
       email?: string | null; // String
       name?: string | null; // String
       password?: string | null; // String
+    }
+    updateStory: { // args
+      description?: string | null; // String
+      id?: string | null; // ID
+      title?: string | null; // String
     }
   }
   Query: {

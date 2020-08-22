@@ -1,4 +1,4 @@
-import { mutationType, stringArg } from '@nexus/schema';
+import { mutationType, stringArg, idArg } from '@nexus/schema';
 import UserModel from '../../models/User';
 import StoryModel from '../../models/Story';
 import { User } from './User';
@@ -26,6 +26,61 @@ export const Mutation = mutationType({
                     return newStory;
                 }
             )
+        });
+
+        t.field('updateStory', {
+            type: Story,
+            description: 'Update Story',
+            nullable: true,
+            args: { id: idArg(), title: stringArg({ nullable: true }), description: stringArg({ nullable: true }) },
+            resolve: async (parent, args, ctx) => {
+
+                const isAuthenticated = await isProtected(ctx);
+                if (!isAuthenticated) {
+                    throw new ErrorResponse('Not Auth!!', 401);
+                }
+
+                const story = await StoryModel.findById(args.id);
+
+                if (story.user.toString() !== ctx.req.user._id.toString()) {
+                    throw new ErrorResponse('Not Auth!!', 401);
+                }
+
+                let body = {};
+
+                if (args.title) {
+                    body.title = args.title;
+                }
+
+                if (args.description) {
+                    body.description = args.description;
+                }
+                const updatedStory = await StoryModel.findByIdAndUpdate(args.id, body, { new: true });
+                return updatedStory;
+            }
+        });
+
+
+        t.field('deleteStory', {
+            type: Story,
+            description: 'Delete Story',
+            nullable: true,
+            args: { id: idArg() },
+            resolve: async (parent, { id }, ctx) => {
+
+                const isAuthenticated = await isProtected(ctx);
+                if (!isAuthenticated) {
+                    throw new ErrorResponse('Not Auth!!', 401);
+                }
+
+                const story = await StoryModel.findById(id);
+
+                if (story.user.toString() !== ctx.req.user._id.toString()) {
+                    throw new ErrorResponse('Not Auth!!', 401);
+                }
+
+                return await StoryModel.findByIdAndDelete(id)
+            }
         });
 
         t.field('login', {

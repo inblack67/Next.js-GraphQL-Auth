@@ -29,9 +29,13 @@ export const Query = queryType({
             args: {
                 id: idArg()
             },
+            nullable: true,
             resolve: asyncHandler(
                 async (_, { id }) => {
                     const story = await StoryModel.findById(id);
+                    if (!story) {
+                        throw new ErrorResponse('Resource not found', 400);
+                    }
                     return story;
                 }
             )

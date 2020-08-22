@@ -6,11 +6,17 @@ type Mutation {
   """Add Story"""
   addStory(description: String, title: String): Story!
 
+  """Delete Story"""
+  deleteStory(id: ID): Story
+
   """Login"""
   login(email: String, password: String): User!
 
   """Register"""
   register(email: String, name: String, password: String): User!
+
+  """Update Story"""
+  updateStory(description: String, id: ID, title: String): Story
 }
 
 type Query {
@@ -21,7 +27,7 @@ type Query {
   stories: [Story!]!
 
   """Get Single Story"""
-  story(id: ID): Story!
+  story(id: ID): Story
 
   """GET All Users"""
   users: [User!]!
