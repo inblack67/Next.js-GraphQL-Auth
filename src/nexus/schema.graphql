@@ -14,8 +14,22 @@ type Query {
   """Get Logged In User"""
   getMe: User!
 
+  """Get All Stories"""
+  stories: [Story!]!
+
+  """Get Single Story"""
+  story(id: ID): Story!
+
   """GET All Users"""
   users: [User!]!
+}
+
+type Story {
+  _id: ID!
+  createdAt: String!
+  description: String!
+  title: String!
+  user: String!
 }
 
 type User {

@@ -17,7 +17,7 @@ const StorySchema = new Schema({
     user: {
         type: Schema.ObjectId,
         ref: 'User',
-        required: true
+        required: [true, 'Who is the creator?']
     },
     createdAt: {
         type: Date,
