@@ -11,3 +11,14 @@ export const fetchStoriesQuery = gql`
     }
 }
 `;
+
+export const fetchSingleStoryQuery = gql`
+query ($id: ID!){
+    story(id: $id){
+        title,
+        description
+        createdAt
+        user
+    }
+}
+`;

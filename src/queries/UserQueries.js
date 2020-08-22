@@ -26,3 +26,13 @@ mutation ($name: String!, $email: String!, $password: String!){
     }
 }
 `;
+
+export const fetchMeQuery = gql`
+{
+    getMe{
+        name,
+        email,
+        _id,
+    }
+}
+`;

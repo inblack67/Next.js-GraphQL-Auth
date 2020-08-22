@@ -1,49 +1,40 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { useMutation, useQuery } from '@apollo/client'
-import { fetchSingleStoryQuery, deleteStoryQuery, fetchStoriesQuery } from '../../../src/queries/Story'
+import { useQuery } from '@apollo/client'
+import { fetchSingleStoryQuery, fetchStoriesQuery } from '../../../src/queries/StoryQueries'
+import { fetchMeQuery } from '../../../src/queries/UserQueries'
 import Preloader from '../../../components/Preloader'
-import DisplayError from '../../../components/DisplayError'
-import EditStory from '../../../components/EditStory'
 
 const SingleStory = () => {
 
     const router = useRouter();
+    const { query: { id } } = router;
 
-    const { data, loading, error } = useQuery(fetchSingleStoryQuery, {
+    const { loading, error, data } = useQuery(fetchSingleStoryQuery, {
         variables: {
-            id: router.query.id
+            id
         }
     });
 
-    const [deleteStory, mutationResponse] = useMutation(deleteStoryQuery);
-
-    if (loading) {
-        return <Preloader />
-    }
+    const getMe = useQuery(fetchMeQuery);
 
     if (error) {
         M.toast({ html: error.message });
-        return <DisplayError message={error.message} />
     }
 
-    const { story, story: { title, description, _id } } = data;
+    if (loading || getMe.loading) {
+        return <Preloader />
+    }
 
     const onDelete = async e => {
-        deleteStory({
-            refetchQueries: [{
-                query: fetchStoriesQuery
-            }],
-            variables: {
-                id: _id
-            }
-        }).catch(err => M.toast({ html: err }));
+        console.log(`delete me`);
     }
 
-    if(mutationResponse.data){
-        M.toast({ html: 'Story deleted' })
-        router.push('/');
-    }
+    const { story: { title, description, _id, user } } = data;
+
+    const {  } = getMe;
+
+    console.log(getMe);
 
     return (
         <div className='container'>
@@ -53,14 +44,11 @@ const SingleStory = () => {
             <p className="flow-text">
                 {description}
             </p>
-            <button className="btn red" onClick={onDelete}>
-                <i className="material-icons left">delete</i> Delete
-            </button>
-            <EditStory story={story} />
+            {_id.toString() === '123' ? <button className='btn red' onClick={onDelete}>
+                Delete
+            </button> : null}
         </div>
     )
 }
 
 export default SingleStory;
-
-

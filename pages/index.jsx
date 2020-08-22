@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { initializeApollo } from '../src/apollo'
 import { fetchStoriesQuery } from '../src/queries/StoryQueries'
 import Preloader from '../components/Preloader'
+import Link from 'next/link'
 
 export default function Home() {
 
@@ -11,7 +12,7 @@ export default function Home() {
     return <Preloader />
   }
 
-  if(error){
+  if (error) {
     M.toast({ html: error.message });
   }
 
@@ -22,7 +23,11 @@ export default function Home() {
       <h3>Stories</h3>
       <ul className="collection">
         {stories.map(story => <li className='collection-item' key={story._id}>
-          {story.title}
+          <Link as={`/story/${story._id}`} href='/story/[id]'>
+            <a>
+              {story.title}
+            </a>
+          </Link>
         </li>)}
       </ul>
     </div>
