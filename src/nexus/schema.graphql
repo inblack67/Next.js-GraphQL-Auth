@@ -3,6 +3,9 @@
 
 
 type Mutation {
+  """Add Story"""
+  addStory(description: String, title: String): Story!
+
   """Login"""
   login(email: String, password: String): User!
 
