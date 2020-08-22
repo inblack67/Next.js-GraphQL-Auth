@@ -29,6 +29,8 @@ export default function Home() {
   )
 }
 
+
+
 export const getStaticProps = async () => {
   const apolloClient = initializeApollo();
   await apolloClient.query({

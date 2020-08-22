@@ -12,6 +12,9 @@ type Mutation {
   """Login"""
   login(email: String, password: String): User!
 
+  """Logout"""
+  logout: User
+
   """Register"""
   register(email: String, name: String, password: String): User!
 

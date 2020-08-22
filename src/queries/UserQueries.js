@@ -8,3 +8,21 @@ mutation ($email: String!, $password: String!){
     }
 }
 `;
+
+export const logoutQuery = gql`
+mutation{
+    logout{
+        email
+    }
+  }
+`;
+
+export const registerQuery = gql`
+mutation ($name: String!, $email: String!, $password: String!){
+    register(name: $name, email: $email, password: $password){
+        name,
+        email,
+        _id,
+    }
+}
+`;

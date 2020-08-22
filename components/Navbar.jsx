@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { server } from '../src/server'
 import Router from 'next/router'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { useMutation } from '@apollo/client'
+import { logoutQuery } from '../src/queries/UserQueries'
 
 const guestLinks = <Fragment>
     <li>
@@ -23,11 +25,32 @@ const guestLinks = <Fragment>
 
 const Navbar = () => {
 
+    const [isAuth, setAuth] = useState(false);
 
-    const onLogout = async e => {
-        console.log(`log me out`);
+    const [logout, { loading, error, data }] = useMutation(logoutQuery);
+
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem('isAuthenticated');
+        if (isAuthenticated === 'true') {
+            setAuth(true);
+        }
+        else {
+            setAuth(false);
+        }
+    }, []);
+
+    const onLogout = e => {
+        logout().then(() => {
+            localStorage.setItem('isAuthenticated', false);
+            setAuth(false);
+        }).catch(err => {
+            console.error(err)
+        })
     }
 
+    if (error) {
+        M.toast({ html: error.message });
+    }
 
     const authLinks = <Fragment>
         <li>
@@ -56,7 +79,7 @@ const Navbar = () => {
                         </a>
                     </Link>
                     <ul className="right">
-                        { guestLinks }
+                        {isAuth ? authLinks : guestLinks}
                         <li className='hide-on-med-and-down'>
                             <Link href='/about'>
                                 <a>

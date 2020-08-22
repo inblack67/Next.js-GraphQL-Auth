@@ -59,6 +59,7 @@ export interface NexusGenFieldTypes {
     addStory: NexusGenRootTypes['Story']; // Story!
     deleteStory: NexusGenRootTypes['Story'] | null; // Story
     login: NexusGenRootTypes['User']; // User!
+    logout: NexusGenRootTypes['User'] | null; // User
     register: NexusGenRootTypes['User']; // User!
     updateStory: NexusGenRootTypes['Story'] | null; // Story
   }

@@ -118,6 +118,32 @@ export const Mutation = mutationType({
             }
         });
 
+        t.field('logout', {
+            type: User,
+            description: 'Logout',
+            nullable: true,
+            resolve: asyncHandler(
+                async (parent, args, ctx) => {
+
+                    const isAuthenticated = await isProtected(ctx);
+
+                    if(!isAuthenticated){
+                        throw new ErrorResponse('Not Authorized', 400);
+                    }
+
+                    ctx.res.setHeader('Set-Cookie', serialize('token', 'none', {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV !== 'development',
+                        sameSite: 'strict',
+                        maxAge: 0,
+                        path: '/',
+                    }))
+
+                    return null;
+                }
+            )
+        })
+
         t.field('register', {
             type: User,
             description: 'Register',
@@ -138,7 +164,7 @@ export const Mutation = mutationType({
                         path: '/'
                     }));
 
-                    return { name: user.name, email: user.email, createdAt: user.createdAt };
+                    return { name: user.name, email: user.email, createdAt: user.createdAt, _id: user._id };
                 }
             )
         })

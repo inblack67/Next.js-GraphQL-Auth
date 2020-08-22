@@ -1,6 +1,10 @@
-import { useContext, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import Router from 'next/router';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import AuthContext from '../context/auth/authContext';
+import { registerQuery } from '../src/queries/UserQueries';
+import Preloader from '../components/Preloader';
+
 
 const Register = () => {
 
@@ -14,13 +18,33 @@ const Register = () => {
         }
     });
 
-    const { registerUser } = useContext(AuthContext);
+    const [registerUser, { data, error, loading }] = useMutation(registerQuery);
 
-    const onLogin = formData => {
+    const onLogin = ({ name, email, password }) => {
         setSubmitting(true);
-        registerUser(formData);
+        registerUser({
+            variables: {
+                name,
+                email,
+                password
+            }
+        }).then(() => {
+            localStorage.setItem('isAuthenticated', true);
+            M.toast({ html: 'Registered' });
+            Router.push('/');
+        }).catch(err => console.error(err));
         setSubmitting(false);
     }
+
+    if(loading){
+        return <Preloader />
+    }
+
+    if(error){
+        M.toast({ html: error.message });
+    }
+
+    console.log(data);
 
     return (
         <div className='container'>

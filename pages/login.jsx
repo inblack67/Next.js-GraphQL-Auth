@@ -18,11 +18,11 @@ const Login = () => {
 
     const [login, { loading, error, data }] = useMutation(loginQuery);
 
-    if(loading){
+    if (loading) {
         return <Preloader />
     }
 
-    if(error){
+    if (error) {
         M.toast({ html: error.message });
     }
 
@@ -34,12 +34,13 @@ const Login = () => {
                 email,
                 password
             },
-        }).then(() => Router.push('/')).catch(err => console.error(err));
+        }).then(() => {
+            localStorage.setItem('isAuthenticated', true);
+            Router.push('/');
+        }).catch(err => console.error(err));
 
         setSubmitting(false);
     }
-
-    console.log(data);
 
     return (
         <div className='container'>
