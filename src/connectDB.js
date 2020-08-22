@@ -1,4 +1,4 @@
-import { connect } from 'mongoose';
+import { connect, disconnect } from 'mongoose';
 import 'colors';
 
 export const connectDB = async () => {
@@ -11,6 +11,15 @@ export const connectDB = async () => {
             useUnifiedTopology: true
         });
         console.log(`Mongo is here`.bold.blue);
+    } catch (err) {
+        console.error(`${err}`.red.bold);
+    }
+}
+
+export const disconnectDB = async () => {
+    try {
+        await disconnect();
+        console.log(`Mongo is gone`.green.blue);
     } catch (err) {
         console.error(`${err}`.red.bold);
     }

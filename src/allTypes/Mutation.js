@@ -1,8 +1,9 @@
 import { mutationType, stringArg } from '@nexus/schema';
 import UserModel from '../../models/User';
 import { User } from './User';
-import { isProtected } from '../isAuthenticated';
 import { serialize } from 'cookie';
+import ErrorHandler from '../../middlewares/errorHandler'
+import asyncHandler from '../../middlewares/asyncHandler'
 import ErrorResponse from '../errorResponse';
 
 export const Mutation = mutationType({
@@ -41,6 +42,31 @@ export const Mutation = mutationType({
 
                 return { name: user.name, email: user.email, createdAt: user.createdAt };
             }
+        });
+
+        t.field('register', {
+            type: User,
+            description: 'Register',
+            args: {
+                name: stringArg(),
+                email: stringArg(),
+                password: stringArg(),
+            },
+            resolve: asyncHandler(
+                async (parent, { name, email, password }, ctx) => {
+                    const user = await UserModel.create({ name, email, password });
+                    const token = user.getSignedJwtToken();
+                    ctx.res.setHeader('Set-Cookie', serialize('token', token, {
+                        httpOnly: true,
+                        secure: process.env.NODE_ENV !== 'development',
+                        sameSite: 'strict',
+                        maxAge: 3600,
+                        path: '/'
+                    }));
+
+                    return { name: user.name, email: user.email, createdAt: user.createdAt };
+                }
+            )
         })
     }
 })

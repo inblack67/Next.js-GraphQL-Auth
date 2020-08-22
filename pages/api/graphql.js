@@ -3,7 +3,8 @@ import { schema } from '../../src/schema';
 import nextConnect from 'next-connect';
 import errorHandler from '../../middlewares/errorHandler';
 import { protect } from '../../middlewares/auth';
-import { connectDB } from '../../src/connectDB';
+import { connectDB, disconnectDB } from '../../src/connectDB';
+import asyncHandler from '../../middlewares/asyncHandler';
 
 connectDB();
 

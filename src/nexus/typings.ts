@@ -50,6 +50,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Mutation: { // field return type
     login: NexusGenRootTypes['User']; // User!
+    register: NexusGenRootTypes['User']; // User!
   }
   Query: { // field return type
     getMe: NexusGenRootTypes['User']; // User!
@@ -68,6 +69,11 @@ export interface NexusGenArgTypes {
   Mutation: {
     login: { // args
       email?: string | null; // String
+      password?: string | null; // String
+    }
+    register: { // args
+      email?: string | null; // String
+      name?: string | null; // String
       password?: string | null; // String
     }
   }

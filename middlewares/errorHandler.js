@@ -30,6 +30,10 @@ const errorHandler = (err, req, res, next) => {
         success: false,
         error: error.message || 'Server Error'
     });
+
+    res.end();
+
+    next();
 }
 
 export default errorHandler;

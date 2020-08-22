@@ -5,6 +5,9 @@
 type Mutation {
   """Login"""
   login(email: String, password: String): User!
+
+  """Register"""
+  register(email: String, name: String, password: String): User!
 }
 
 type Query {
