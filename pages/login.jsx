@@ -9,12 +9,7 @@ const Login = () => {
 
     const [submitting, setSubmitting] = useState(false);
 
-    const { register, handleSubmit, errors } = useForm({
-        defaultValues: {
-            email: 'aman1@gmail.com',
-            password: 'Aman123@',
-        }
-    });
+    const { register, handleSubmit, errors } = useForm();
 
     const [login, { loading, error, data }] = useMutation(loginQuery);
 

@@ -18,7 +18,8 @@ query ($id: ID!){
         title,
         description
         createdAt
-        user
+        user,
+        _id
     }
 }
 `;
@@ -41,6 +42,14 @@ mutation ($id: ID!, $title: String, $description: String){
         description,
         _id,
         user
+    }
+}
+`;
+
+export const deleteStoryQuery = gql`
+mutation ($id: ID!){
+    deleteStory(id: $id){
+        title
     }
 }
 `;

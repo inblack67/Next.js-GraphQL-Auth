@@ -43,6 +43,8 @@ const Navbar = () => {
         logout().then(() => {
             localStorage.setItem('isAuthenticated', false);
             setAuth(false);
+            M.toast({ html: 'Logged out!' });
+            Router.push('/');
         }).catch(err => {
             console.error(err)
         })

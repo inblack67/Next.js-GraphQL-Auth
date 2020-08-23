@@ -36,7 +36,7 @@ function createApolloClient() {
     return new ApolloClient({
         ssrMode: typeof window === 'undefined',
         link: errorLink.concat(createIsomorphLink()),
-        cache: new InMemoryCache(),
+        cache: new InMemoryCache()
     })
 }
 

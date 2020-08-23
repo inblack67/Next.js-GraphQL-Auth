@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { initializeApollo } from '../src/apollo'
 import { fetchStoriesQuery } from '../src/queries/StoryQueries'
+import { fetchMeQuery } from '../src/queries/UserQueries'
 import Preloader from '../components/Preloader'
 import Link from 'next/link'
 import { createApolloFetch } from 'apollo-fetch';
@@ -32,7 +33,7 @@ export default function Home({ user }) {
             </a>
           </Link>
 
-          {user && (user.getMe._id.toString() === story.user.toString()) && <Link as={`/story/${story._id}/edit`} href='/story/[id]/edit'>
+          {user && (user.getMe._id.toString() === story.user.toString()) && <Link as={`/story/${story._id}`} href='/story/[id]'>
             <a className='secondary-content'>
               <i className="material-icons">edit</i>
             </a>

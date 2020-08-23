@@ -10,13 +10,7 @@ const Register = () => {
 
     const [submitting, setSubmitting] = useState(false);
 
-    const { register, handleSubmit, errors } = useForm({
-        defaultValues: {
-            name: 'Aman',
-            email: 'aman@gmail.com',
-            password: 'Aman123@',
-        }
-    });
+    const { register, handleSubmit, errors } = useForm();
 
     const [registerUser, { data, error, loading }] = useMutation(registerQuery);
 
