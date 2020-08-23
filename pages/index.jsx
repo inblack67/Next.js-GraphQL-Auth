@@ -32,7 +32,7 @@ export default function Home({ user }) {
             </a>
           </Link>
 
-          {user && user.getMe._id.toString() === story._id.toString() && <Link as={`/story/${story._id}/edit`} href='/story/[id]/edit'>
+          {user && (user.getMe._id.toString() === story.user.toString()) && <Link as={`/story/${story._id}/edit`} href='/story/[id]/edit'>
             <a className='secondary-content'>
               <i className="material-icons">edit</i>
             </a>

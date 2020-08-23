@@ -33,3 +33,14 @@ mutation ($title: String!, $description: String!){
     }
 }
 `;
+
+export const updateStoryQuery = gql`
+mutation ($id: ID!, $title: String, $description: String){
+    updateStory(id: $id, title: $title, description: $description){
+        title,
+        description,
+        _id,
+        user
+    }
+}
+`;

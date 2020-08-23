@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
-import { fetchStoriesQuery } from '../../src/queries/StoryQueries'
-import Preloader from '../../components/Preloader';
+import { fetchStoriesQuery, updateStoryQuery } from '../../../src/queries/StoryQueries'
+import Preloader from '../../../components/Preloader';
 import { useRouter } from 'next/router';
 
 
-const EditStory = ({ story: { title, description, _id } }) => {
+const EditStory = () => {
 
     const router = useRouter();
+
+    const { query: { id } } = router;
 
     const [submitting, setSubmitting] = useState(false);
 
@@ -19,21 +21,25 @@ const EditStory = ({ story: { title, description, _id } }) => {
         }
     });
 
+    const [updateStory, { loading, data, error }] = useMutation(updateStoryQuery);
+
     const onStoryUpdate = ({ title, description }) => {
         setSubmitting(true);
-        console.log(title, description);
-        // updateStory({
-        //     variables: {
-        //         id: _id,
-        //         title,
-        //         description
-        //     },
-        //     refetchQueries: [{
-        //         query: fetchStoriesQuery
-        //     }],
-        // }).catch(err => {
-        //     M.toast({ html: err });
-        // });
+        updateStory({
+            variables: {
+                id,
+                title,
+                description
+            },
+            refetchQueries: [{
+                query: fetchStoriesQuery
+            }],
+        }).then(() => {
+            M.toast({ html: 'Story updated!' });
+            router.push(`/`);
+        }).catch(err => {
+            M.toast({ html: err });
+        });
         setSubmitting(false);
     }
 
@@ -41,9 +47,8 @@ const EditStory = ({ story: { title, description, _id } }) => {
         return <Preloader />
     }
 
-    if (data) {
-        M.toast({ html: 'Story Updated' });
-        router.push('/');
+    if (error) {
+        M.toast({ html: error.message });
     }
 
     return (
@@ -79,10 +84,5 @@ const EditStory = ({ story: { title, description, _id } }) => {
         </div>
     )
 }
-
-EditStory.propTypes = {
-    story: PropTypes.object.isRequired,
-}
-
 
 export default EditStory;
