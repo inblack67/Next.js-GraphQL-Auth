@@ -2,6 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 import { fetchSingleStoryQuery, fetchStoriesQuery } from '../../../src/queries/StoryQueries'
+import { fetchStoryAndUser } from '../../../src/queries/MultipleQueries'
 import { fetchMeQuery } from '../../../src/queries/UserQueries'
 import Preloader from '../../../components/Preloader'
 
@@ -16,13 +17,11 @@ const SingleStory = () => {
         }
     });
 
-    const getMe = useQuery(fetchMeQuery);
-
     if (error) {
         M.toast({ html: error.message });
     }
 
-    if (loading || getMe.loading) {
+    if (loading) {
         return <Preloader />
     }
 
@@ -30,11 +29,9 @@ const SingleStory = () => {
         console.log(`delete me`);
     }
 
-    const { story: { title, description, _id, user } } = data;
+    const { story: { title, description } } = data;
 
-    const {  } = getMe;
-
-    console.log(getMe);
+    console.log(data);
 
     return (
         <div className='container'>
@@ -44,9 +41,9 @@ const SingleStory = () => {
             <p className="flow-text">
                 {description}
             </p>
-            {_id.toString() === '123' ? <button className='btn red' onClick={onDelete}>
+            {/* {_id.toString() === '123' ? <button className='btn red' onClick={onDelete}>
                 Delete
-            </button> : null}
+            </button> : null} */}
         </div>
     )
 }

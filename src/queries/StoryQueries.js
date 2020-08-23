@@ -22,3 +22,14 @@ query ($id: ID!){
     }
 }
 `;
+
+export const addStoryQuery = gql`
+mutation ($title: String!, $description: String!){
+    addStory(title: $title, description: $description){
+        title,
+        description,
+        _id,
+        user
+    }
+}
+`;

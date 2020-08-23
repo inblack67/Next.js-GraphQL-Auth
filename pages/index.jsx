@@ -3,8 +3,11 @@ import { initializeApollo } from '../src/apollo'
 import { fetchStoriesQuery } from '../src/queries/StoryQueries'
 import Preloader from '../components/Preloader'
 import Link from 'next/link'
+import { createApolloFetch } from 'apollo-fetch';
+import { server } from '../src/server';
+import axios from 'axios';
 
-export default function Home() {
+export default function Home({ user }) {
 
   const { loading, error, data } = useQuery(fetchStoriesQuery);
 
@@ -28,22 +31,60 @@ export default function Home() {
               {story.title}
             </a>
           </Link>
+
+          {user && user.getMe._id.toString() === story._id.toString() && <Link as={`/story/${story._id}/edit`} href='/story/[id]/edit'>
+            <a className='secondary-content'>
+              <i className="material-icons">edit</i>
+            </a>
+          </Link>}
+
         </li>)}
       </ul>
     </div>
   )
 }
 
+export const getServerSideProps = async (ctx) => {
 
-
-export const getStaticProps = async () => {
-  const apolloClient = initializeApollo();
-  await apolloClient.query({
-    query: fetchStoriesQuery
-  });
-  return {
-    props: {
-      initialApolloState: apolloClient.cache.extract()
+  const cookie = ctx.req.headers.cookie;
+  const config = {
+    headers: {
+      cookie: cookie ?? null
     }
   }
+
+  const query = `
+  {
+    getMe{
+      name,
+      email,
+      _id
+    }
+  }
+  `;
+
+  const data = JSON.stringify({ query })
+
+  try {
+    const res = await axios.post(`${server}/api/graphql`, data, config);
+    console.log(res);
+    return { props: { user: res.data.data } };
+  } catch (err) {
+    console.error(err);
+    return { props: { user: null } };
+  }
+
 }
+
+
+// export const getStaticProps = async () => {
+//   const apolloClient = initializeApollo();
+//   await apolloClient.query({
+//     query: fetchStoriesQuery
+//   });
+//   return {
+//     props: {
+//       initialApolloState: apolloClient.cache.extract()
+//     }
+//   }
+// }
